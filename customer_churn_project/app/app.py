@@ -16,7 +16,7 @@ model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 feature_names = joblib.load(FEATURES_PATH)
 
-CHURN_THRESHOLD = 0.18
+CHURN_THRESHOLD = 0.11
 
 # ---------------- UI ----------------
 st.title("📉 Customer Churn Prediction")
@@ -90,4 +90,5 @@ if st.button("🔍 Predict Churn"):
 
     st.divider()
     st.caption(f"Decision threshold used: {CHURN_THRESHOLD}")
+
 
