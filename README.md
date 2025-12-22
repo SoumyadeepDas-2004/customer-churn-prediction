@@ -44,7 +44,7 @@ Logistic Regression performed best and was selected for deployment.
 ## 🚀 Deployment
 The model is deployed using **Streamlit**.
 
-👉 **Live App:** https://<your-streamlit-link>
+👉 **Live App:** https://customer-churn-prediction-mqdsbfpyszctevkycydgmj.streamlit.app/
 
 ---
 
