@@ -66,8 +66,6 @@ elif contract == "Two year":
 # Internet service
 if internet == "Fiber optic":
     input_df["InternetService_Fiber optic"] = 1
-elif internet == "DSL":
-    input_df["InternetService_DSL"] = 1
 elif internet == "No":
     input_df["InternetService_No"] = 1
 
@@ -123,3 +121,4 @@ if st.button("🔍 Predict Churn"):
 
     st.divider()
     st.caption(f"Decision threshold used: {CHURN_THRESHOLD}")
+
