@@ -16,7 +16,7 @@ model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 feature_names = joblib.load(FEATURES_PATH)
 
-CHURN_THRESHOLD = 0.35
+CHURN_THRESHOLD = 0.60
 
 # ---------------- UI ----------------
 st.title("📉 Customer Churn Prediction")
@@ -93,9 +93,6 @@ elif payment_method == "Mailed check":
     input_df["PaymentMethod_Mailed check"] = 1
 elif payment_method == "Credit card (automatic)":
     input_df["PaymentMethod_Credit card (automatic)"] = 1
-else:
-    # Bank transfer (automatic)
-    input_df["PaymentMethod_Bank transfer (automatic)"] = 1
 
 # ---------------- SCALE ----------------
 input_scaled = scaler.transform(input_df)
@@ -121,4 +118,5 @@ if st.button("🔍 Predict Churn"):
 
     st.divider()
     st.caption(f"Decision threshold used: {CHURN_THRESHOLD}")
+
 
