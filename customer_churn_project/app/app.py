@@ -31,40 +31,73 @@ contract = st.selectbox("Contract Type", ["Month-to-month", "One year", "Two yea
 internet = st.selectbox("Internet Service", ["DSL", "Fiber optic", "No"])
 paperless = st.selectbox("Paperless Billing", ["Yes", "No"])
 
-# ---------------- BUILD INPUT (CRITICAL FIX) ----------------
+# NEW IMPORTANT FEATURES
+tech_support = st.selectbox("Tech Support", ["Yes", "No"])
+online_security = st.selectbox("Online Security", ["Yes", "No"])
+payment_method = st.selectbox("Payment Method", [
+    "Electronic check",
+    "Mailed check",
+    "Credit card (automatic)",
+    "Bank transfer (automatic)"
+])
+
+# ---------------- BUILD INPUT DATAFRAME ----------------
 input_df = pd.DataFrame(0, columns=feature_names, index=[0])
 
 # Numeric features
-if "tenure" in input_df.columns:
-    input_df["tenure"] = tenure
+input_df["tenure"] = tenure
+input_df["MonthlyCharges"] = monthly_charges
+input_df["TotalCharges"] = total_charges
 
-if "MonthlyCharges" in input_df.columns:
-    input_df["MonthlyCharges"] = monthly_charges
+# Tenure group (auto-generated)
+if 12 <= tenure < 24 and "tenure_group_1-2yr" in input_df.columns:
+    input_df["tenure_group_1-2yr"] = 1
+elif 24 <= tenure < 48 and "tenure_group_2-4yr" in input_df.columns:
+    input_df["tenure_group_2-4yr"] = 1
+elif 48 <= tenure < 72 and "tenure_group_4-6yr" in input_df.columns:
+    input_df["tenure_group_4-6yr"] = 1
 
-if "TotalCharges" in input_df.columns:
-    input_df["TotalCharges"] = total_charges
-
-# Derived feature (only if it existed in training)
-if "ChargesPerMonth" in input_df.columns:
-    input_df["ChargesPerMonth"] = total_charges / max(tenure, 1)
-
-# Contract (baseline = Month-to-month)
-if contract == "One year" and "Contract_One year" in input_df.columns:
+# Contract
+if contract == "One year":
     input_df["Contract_One year"] = 1
-
-if contract == "Two year" and "Contract_Two year" in input_df.columns:
+elif contract == "Two year":
     input_df["Contract_Two year"] = 1
 
 # Internet service
-if internet == "Fiber optic" and "InternetService_Fiber optic" in input_df.columns:
+if internet == "Fiber optic":
     input_df["InternetService_Fiber optic"] = 1
-
-if internet == "No" and "InternetService_No" in input_df.columns:
+elif internet == "DSL":
+    input_df["InternetService_DSL"] = 1
+elif internet == "No":
     input_df["InternetService_No"] = 1
 
-# Paperless billing
-if paperless == "Yes" and "PaperlessBilling_Yes" in input_df.columns:
-    input_df["PaperlessBilling_Yes"] = 1
+# Paperless Billing
+input_df["PaperlessBilling"] = 1 if paperless == "Yes" else 0
+
+# Tech Support
+if tech_support == "Yes" and "TechSupport_Yes" in input_df.columns:
+    input_df["TechSupport_Yes"] = 1
+else:
+    if "TechSupport_No" in input_df.columns:
+        input_df["TechSupport_No"] = 1
+
+# Online Security
+if online_security == "Yes" and "OnlineSecurity_Yes" in input_df.columns:
+    input_df["OnlineSecurity_Yes"] = 1
+else:
+    if "OnlineSecurity_No" in input_df.columns:
+        input_df["OnlineSecurity_No"] = 1
+
+# Payment Method
+if payment_method == "Electronic check":
+    input_df["PaymentMethod_Electronic check"] = 1
+elif payment_method == "Mailed check":
+    input_df["PaymentMethod_Mailed check"] = 1
+elif payment_method == "Credit card (automatic)":
+    input_df["PaymentMethod_Credit card (automatic)"] = 1
+else:
+    # Bank transfer (automatic)
+    input_df["PaymentMethod_Bank transfer (automatic)"] = 1
 
 # ---------------- SCALE ----------------
 input_scaled = scaler.transform(input_df)
